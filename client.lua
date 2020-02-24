@@ -69,7 +69,7 @@ Citizen.CreateThread(function()
 		local pedCoords = GetEntityCoords(PlayerPedId())
 		local closestObject = GetClosestObjectOfType(pedCoords, 10.0, GetHashKey("prop_wheelchair_01"), false)
 		local wheelChairCoords = GetEntityCoords(closestObject)
-			if GetDistanceBetweenCoords(pedCoords, wheelChairCoords, true) <= 1.5 then
+			if GetDistanceBetweenCoords(pedCoords, wheelChairCoords, true) <= 2.5 then
 				drawTxt("~g~E~s~ взять ~o~G~s~ сесть ~r~X~w~ отпустить",0,1,0.5,0.95,0.6,255,255,255,255)
 				if IsControlJustPressed(0, 38) then
 					pickup(closestObject)
