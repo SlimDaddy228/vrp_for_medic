@@ -85,7 +85,7 @@ RegisterNetEvent("spawnkolycka")
 AddEventHandler("spawnkolycka", function()
 	LoadModel('prop_wheelchair_01')
 
-	local wheelchair = CreateObject(GetHashKey('prop_wheelchair_01'), GetEntityCoords(PlayerPedId()), true)
+	local wheelchair = CreateObject(GetHashKey('prop_wheelchair_01'), GetEntityCoords(PlayerPedId())-1, true)
 end, false)
 
 RegisterNetEvent("deletekolycka")
