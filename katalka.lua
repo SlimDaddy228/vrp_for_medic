@@ -28,32 +28,34 @@ local function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 end
 
 local function lech(wheelchairObject)
+	local ped = PlayerPedId()
 	LoadAnim("anim@gangops@morgue@table@")
-	AttachEntityToEntity(PlayerPedId(), wheelchairObject, 0, -0.06, 0.1, 1.3, 0.0, 0.0, 179.0, 0.0, false, false, false, false, 2, true)
-	while IsEntityAttachedToEntity(PlayerPedId(), wheelchairObject) do
+	AttachEntityToEntity(ped, wheelchairObject, 0, -0.06, 0.1, 1.3, 0.0, 0.0, 179.0, 0.0, false, false, false, false, 2, true)
+	while IsEntityAttachedToEntity(ped, wheelchairObject) do
 		Wait(10)
-		if not IsEntityPlayingAnim(PlayerPedId(), 'anim@gangops@morgue@table@', 'ko_front', 3) then
-			TaskPlayAnim(PlayerPedId(), 'anim@gangops@morgue@table@', 'ko_front', 8.0, 8.0, -1, 69, 1, false, false, false)
+		if not IsEntityPlayingAnim(ped, 'anim@gangops@morgue@table@', 'ko_front', 3) then
+			TaskPlayAnim(ped, 'anim@gangops@morgue@table@', 'ko_front', 8.0, 8.0, -1, 69, 1, false, false, false)
 		end
-			if IsControlJustPressed(0, 73) then
-				DetachEntity(wheelchairObject, true, true)
-				ClearPedTasks(PlayerPedId())
+		if IsControlJustPressed(0, 73) then
+			DetachEntity(wheelchairObject, true, true)
+			ClearPedTasks(ped)
 		end
 	end
 end
 
 local function pickup(wheelchairObject)
+	local ped = PlayerPedId()
 	NetworkRequestControlOfEntity(wheelchairObject)
 	LoadAnim("anim@mp_ferris_wheel")
-	AttachEntityToEntity(wheelchairObject, GetPlayerPed(-1), GetPlayerPed(-1), 0.0, 1.8, -0.40 , 180.0, 180.0, 180.0, 0.0, false, false, true, false, 2, true)
-	while IsEntityAttachedToEntity(wheelchairObject, PlayerPedId()) do
+	AttachEntityToEntity(wheelchairObject, ped, ped, 0.0, 1.8, -0.40 , 180.0, 180.0, 180.0, 0.0, false, false, true, false, 2, true)
+	while IsEntityAttachedToEntity(wheelchairObject, ped) do
 		Wait(10)
-		if not IsEntityPlayingAnim(PlayerPedId(), 'anim@mp_ferris_wheel', 'idle_a_player_one', 3) then
-			TaskPlayAnim(PlayerPedId(), 'anim@mp_ferris_wheel', 'idle_a_player_one', 8.0, 8.0, -1, 50, 0, false, false, false)
+		if not IsEntityPlayingAnim(ped, 'anim@mp_ferris_wheel', 'idle_a_player_one', 3) then
+			TaskPlayAnim(ped, 'anim@mp_ferris_wheel', 'idle_a_player_one', 8.0, 8.0, -1, 50, 0, false, false, false)
 		end
 		if IsControlJustPressed(0, 73) then
 			DetachEntity(wheelchairObject, true, true)
-			ClearPedTasks(PlayerPedId())
+			ClearPedTasks(ped)
 		end
 	end
 end
@@ -62,8 +64,7 @@ end
 Citizen.CreateThread(function()
 	while true do
 		Wait(10)
-		local ped = PlayerPedId()
-		local pedCoords = GetEntityCoords(ped)
+		local pedCoords = GetEntityCoords(PlayerPedId())
 		local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("v_med_bed1"), false)
 		if DoesEntityExist(closestObject) then
 			local wheelChairCoords = GetEntityCoords(closestObject)
@@ -80,8 +81,6 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
-
-
 
 
 RegisterNetEvent('spawnkatalka')

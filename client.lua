@@ -31,34 +31,36 @@ local function LoadAnim(dict)
 end
 
 local function lech(wheelchairObject)
+	local ped = PlayerPedId()
 	LoadAnim("missfinale_c2leadinoutfin_c_int")
-	AttachEntityToEntity(PlayerPedId(), wheelchairObject, 0, 0, 0.0, 0.4, 0.0, 0.0, 180.0, 0.0, false, false, false, false, 2, true)
-	while IsEntityAttachedToEntity(PlayerPedId(), wheelchairObject) do
+	AttachEntityToEntity(ped, wheelchairObject, 0, 0, 0.0, 0.4, 0.0, 0.0, 180.0, 0.0, false, false, false, false, 2, true)
+	while IsEntityAttachedToEntity(ped, wheelchairObject) do
 		Wait(10)
-		if not IsEntityPlayingAnim(PlayerPedId(), 'missfinale_c2leadinoutfin_c_int', '_leadin_loop2_lester', 3) then
-			TaskPlayAnim(PlayerPedId(), 'missfinale_c2leadinoutfin_c_int', '_leadin_loop2_lester', 8.0, 8.0, -1, 69, 1, false, false, false)
+		if not IsEntityPlayingAnim(ped, 'missfinale_c2leadinoutfin_c_int', '_leadin_loop2_lester', 3) then
+			TaskPlayAnim(ped, 'missfinale_c2leadinoutfin_c_int', '_leadin_loop2_lester', 8.0, 8.0, -1, 69, 1, false, false, false)
 		end
-			if IsControlJustPressed(0, 73) then
-				Wait(10)
-				DetachEntity(wheelchairObject, true, true)
-				ClearPedTasks(PlayerPedId())
+		if IsControlJustPressed(0, 73) then
+			Wait(10)
+			DetachEntity(wheelchairObject, true, true)
+			ClearPedTasks(ped)
 		end
 	end
 end
 
 local function pickup(wheelchairObject)
+	local ped = PlayerPedId()
 	NetworkRequestControlOfEntity(wheelchairObject)
 	LoadAnim("anim@heists@box_carry@")
-	AttachEntityToEntity(wheelchairObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(),  28422), -0.00, -0.3, -0.73, 195.0, 180.0, 180.0, 0.0, false, false, true, false, 2, true)
-	while IsEntityAttachedToEntity(wheelchairObject, PlayerPedId()) do
+	AttachEntityToEntity(wheelchairObject, ped, GetPedBoneIndex(ped,  28422), -0.00, -0.3, -0.73, 195.0, 180.0, 180.0, 0.0, false, false, true, false, 2, true)
+	while IsEntityAttachedToEntity(wheelchairObject, ped) do
 		Wait(5)
-		if not IsEntityPlayingAnim(PlayerPedId(), 'anim@heists@box_carry@', 'idle', 3) then
-			TaskPlayAnim(PlayerPedId(), 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
+		if not IsEntityPlayingAnim(ped, 'anim@heists@box_carry@', 'idle', 3) then
+			TaskPlayAnim(ped, 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
 		end
 		if IsControlJustPressed(0, 73) then
 			Wait(20)
 			DetachEntity(wheelchairObject, true, true)
-			ClearPedTasks(PlayerPedId())
+			ClearPedTasks(ped)
 		end
 	end
 end
@@ -80,8 +82,6 @@ CreateThread(function()
 			end
 		end
 end)
-
-
 
 RegisterNetEvent("spawnkolycka")
 AddEventHandler("spawnkolycka", function()
