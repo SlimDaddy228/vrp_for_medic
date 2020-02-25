@@ -4,8 +4,6 @@ local Proxy = module("vrp", "lib/Proxy")
 vRP = Proxy.getInterface("vRP")
 vRPclient = Tunnel.getInterface("vRP","vrp_for_medic")
 
-
-
 local function ch_spawnkatalka(player,choice)
   TriggerClientEvent("spawnkatalka",player)
 end
@@ -21,7 +19,6 @@ end
 local function ch_deletekolycka(player,choice)
   TriggerClientEvent("deletekolycka",player)
 end
-
 
 vRP.registerMenuBuilder("main", function(add, data)
   local user_id = vRP.getUserId(data.player)
