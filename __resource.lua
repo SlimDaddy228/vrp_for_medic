@@ -2,8 +2,8 @@ dependency "vrp"
 
 client_scripts {
 	"@vrp/lib/utils.lua",
-	"client.lua",
-	"katalka.lua"
+	"wheelchair.lua",
+	"gurney.lua"
 }
 
 server_scripts {
