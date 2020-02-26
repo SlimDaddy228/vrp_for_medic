@@ -3,10 +3,10 @@ dependency "vrp"
 client_scripts {
 	"@vrp/lib/utils.lua",
 	"wheelchair.lua",
-	"gurney.lua"
+	"stretcher.lua"
 }
 
 server_scripts {
-    "@vrp/lib/utils.lua",
+	"@vrp/lib/utils.lua",
 	"server.lua"
 }
