@@ -1,8 +1,6 @@
-local Tunnel = module("vrp", "lib/Tunnel")
 local Proxy = module("vrp", "lib/Proxy")
 
 vRP = Proxy.getInterface("vRP")
-vRPclient = Tunnel.getInterface("vRP","vrp_for_medic")
 
 local function ch_spawn_strecher(player,choice)
   TriggerClientEvent("vrp_for_medic:stretcher:spawn", player)
