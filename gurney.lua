@@ -27,7 +27,7 @@ local function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 	DrawText(x , y)
 end
 
-local function lech(wheelchairObject)
+local function GoToBed(wheelchairObject)
 	local ped = PlayerPedId()
 	LoadAnim("anim@gangops@morgue@table@")
 	AttachEntityToEntity(ped, wheelchairObject, 0, -0.06, 0.1, 1.3, 0.0, 0.0, 179.0, 0.0, false, false, false, false, 2, true)
@@ -43,7 +43,7 @@ local function lech(wheelchairObject)
 	end
 end
 
-local function pickup(wheelchairObject)
+local function Pickup(wheelchairObject)
 	local ped = PlayerPedId()
 	NetworkRequestControlOfEntity(wheelchairObject)
 	LoadAnim("anim@mp_ferris_wheel")
@@ -72,10 +72,10 @@ Citizen.CreateThread(function()
 			if GetDistanceBetweenCoords(pedCoords, pickupCoords, true) <= 1.5 then
 				drawTxt("~g~E~s~ взять ~o~G~s~ лечь ~r~X~w~ отпустить",0,1,0.5,0.95,0.6,255,255,255,255)
 				if IsControlJustPressed(0, 38) then
-					pickup(closestObject)
+					Pickup(closestObject)
 				end
 				if IsControlJustPressed(0, 47) then
-					lech(closestObject)
+					GoToBed(closestObject)
 				end
 			end
 		end

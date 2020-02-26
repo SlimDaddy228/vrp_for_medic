@@ -30,7 +30,7 @@ local function LoadAnim(dict)
 	end
 end
 
-local function lech(wheelchairObject)
+local function Sit(wheelchairObject)
 	local ped = PlayerPedId()
 	LoadAnim("missfinale_c2leadinoutfin_c_int")
 	AttachEntityToEntity(ped, wheelchairObject, 0, 0, 0.0, 0.4, 0.0, 0.0, 180.0, 0.0, false, false, false, false, 2, true)
@@ -47,7 +47,7 @@ local function lech(wheelchairObject)
 	end
 end
 
-local function pickup(wheelchairObject)
+local function Pickup(wheelchairObject)
 	local ped = PlayerPedId()
 	NetworkRequestControlOfEntity(wheelchairObject)
 	LoadAnim("anim@heists@box_carry@")
@@ -74,10 +74,10 @@ CreateThread(function()
 			if GetDistanceBetweenCoords(pedCoords, wheelChairCoords, true) <= 2.5 then
 				drawTxt("~g~E~s~ взять ~o~G~s~ сесть ~r~X~w~ отпустить",0,1,0.5,0.95,0.6,255,255,255,255)
 				if IsControlJustPressed(0, 38) then
-					pickup(closestObject)
+					Pickup(closestObject)
 				end
 				if IsControlJustPressed(0, 47) then
-					lech(closestObject)
+					Sit(closestObject)
 				end
 			end
 		end
