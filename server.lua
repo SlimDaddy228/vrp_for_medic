@@ -11,11 +11,11 @@ local function ch_delete_strecher(player,choice)
 end
 
 local function ch_spawn_wheelchair(player,choice)
-  TriggerClientEvent("vrp_for_medic:stretcher:spawn",player)
+  TriggerClientEvent("vrp_for_medic:wheelchair:spawn",player)
 end
 
 local function ch_delete_wheelchair(player,choice)
-  TriggerClientEvent("vrp_for_medic:stretcher:delete",player)
+  TriggerClientEvent("vrp_for_medic:wheelchair:delete",player)
 end
 
 vRP.registerMenuBuilder("main", function(add, data)
