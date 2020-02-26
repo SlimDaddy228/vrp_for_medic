@@ -107,14 +107,14 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('spawnkatalka')
-AddEventHandler('spawnkatalka', function()
+RegisterNetEvent('vrp_for_medic:stretcher:spawn')
+AddEventHandler('vrp_for_medic:stretcher:spawn', function()
 	LoadModel('v_med_bed1')
 	local wheelchair = CreateObject(GetHashKey('v_med_bed1'), GetEntityCoords(PlayerPedId())-1, true)
 end)
 
-RegisterNetEvent('deletekatalka')
-AddEventHandler('deletekatalka', function()
+RegisterNetEvent('vrp_for_medic:stretcher:delete')
+AddEventHandler('vrp_for_medic:stretcher:delete', function()
 	local wheelchair = GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 10.0, GetHashKey('v_med_bed1'))
 	if DoesEntityExist(wheelchair) then
 		DeleteEntity(wheelchair)
