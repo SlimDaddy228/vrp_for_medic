@@ -12,12 +12,12 @@ local function ch_delete_strecher(player,choice)
   TriggerClientEvent("vrp_for_medic:stretcher:delete", player)
 end
 
-local function ch_spawnkolycka(player,choice)
-  TriggerClientEvent("spawnkolycka",player)
+local function ch_spawn_wheelchair(player,choice)
+  TriggerClientEvent("vrp_for_medic:stretcher:spawn",player)
 end
 
-local function ch_deletekolycka(player,choice)
-  TriggerClientEvent("deletekolycka",player)
+local function ch_delete_wheelchair(player,choice)
+  TriggerClientEvent("vrp_for_medic:stretcher:delete",player)
 end
 
 vRP.registerMenuBuilder("main", function(add, data)
@@ -39,10 +39,10 @@ vRP.registerMenuBuilder("main", function(add, data)
         menu["Удалить каталку"] = {ch_delete_strecher, "Удалить каталку"}
       end
       if vRP.hasPermission(user_id, "player.list") then
-        menu["Инвалидное кресло"] = {ch_spawnkolycka, "Заспавнить кресло"}
+        menu["Инвалидное кресло"] = {ch_spawn_wheelchair, "Заспавнить кресло"}
       end
       if vRP.hasPermission(user_id, "player.list") then
-        menu["Удалить кресло"] = {ch_deletekolycka, "Удалить кресло"}
+        menu["Удалить кресло"] = {ch_delete_wheelchair, "Удалить кресло"}
       end
 
       vRP.openMenu(player,menu)

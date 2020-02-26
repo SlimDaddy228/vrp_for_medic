@@ -108,15 +108,15 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent("spawnkolycka")
-AddEventHandler("spawnkolycka", function()
+RegisterNetEvent('vrp_for_medic:wheelchair:spawn')
+AddEventHandler('vrp_for_medic:wheelchair:spawn', function()
 	LoadModel('prop_wheelchair_01')
 
 	local wheelchair = CreateObject(GetHashKey('prop_wheelchair_01'), GetEntityCoords(PlayerPedId()), true)
 end, false)
 
-RegisterNetEvent("deletekolycka")
-AddEventHandler("deletekolycka", function()
+RegisterNetEvent('vrp_for_medic:wheelchair:delete')
+AddEventHandler('vrp_for_medic:wheelchair:delete', function()
 	local wheelchair = GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 10.0, GetHashKey('prop_wheelchair_01'))
 
 	if DoesEntityExist(wheelchair) then
