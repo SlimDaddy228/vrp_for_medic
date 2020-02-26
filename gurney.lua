@@ -12,19 +12,33 @@ local function LoadAnim(dict)
 		Wait(10)
 	end
 end
-local function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
-	SetTextFont(6)
-	SetTextProportional(6)
-	SetTextScale(scale/1.0, scale/1.0)
-	SetTextColour(r, g, b, a)
-	SetTextDropShadow(0, 0, 0, 0,255)
-	SetTextEdge(1, 0, 0, 0, 255)
-	SetTextDropShadow()
-	SetTextOutline()
-	SetTextCentre(centre)
+
+local function DrawText3Ds(coords, text, scale, color, notRect)
+	local x,y,z = coords.x, coords.y, coords.z
+	local onScreen, _x, _y = World3dToScreen2d(x, y, z)
+	local pX, pY, pZ = table.unpack(GetGameplayCamCoords())
+
+  color = color
+
+  if not color then
+    color = {255, 255, 255, 215}
+  end
+
+	SetTextScale(scale, scale)
+	SetTextFont(4)
+	SetTextProportional(1)
 	SetTextEntry("STRING")
+	SetTextCentre(1)
+	SetTextColour(color[1], color[2], color[3], color[4])
+
 	AddTextComponentString(text)
-	DrawText(x , y)
+	DrawText(_x, _y)
+
+  if not notRect then
+    local factor = (string.len(text)) / 370
+
+    DrawRect(_x, _y + 0.0150, 0.005 + factor, 0.025, 41, 11, 41, 100)
+  end
 end
 
 local function GoToBed(wheelchairObject)
@@ -60,28 +74,37 @@ local function Pickup(wheelchairObject)
 	end
 end
 
+local nearObject
 
 Citizen.CreateThread(function()
 	while true do
-		Wait(5)
+		Wait(1000)
 		local pedCoords = GetEntityCoords(PlayerPedId())
 		local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("v_med_bed1"), false)
 		if DoesEntityExist(closestObject) then
-			local wheelChairCoords = GetEntityCoords(closestObject)
-			local pickupCoords = wheelChairCoords
-			if GetDistanceBetweenCoords(pedCoords, pickupCoords, true) <= 1.5 then
-				drawTxt("~g~E~s~ взять ~o~G~s~ лечь ~r~X~w~ отпустить",0,1,0.5,0.95,0.6,255,255,255,255)
-				if IsControlJustPressed(0, 38) then
-					Pickup(closestObject)
-				end
-				if IsControlJustPressed(0, 47) then
-					GoToBed(closestObject)
-				end
-			end
+			nearObject = closestObject
+		else
+			nearObject = nil
 		end
 	end
 end)
 
+Citizen.CreateThread(function()
+	while true do
+		Wait(5)
+		if not nearObject then return end
+		
+		local wheelChairCoords = GetEntityCoords(nearObject)
+		DrawText3Ds(wheelChairCoords, "~g~E~s~ взять ~o~G~s~ лечь ~r~X~w~ отпустить", 1.0, nil)
+
+		if IsControlJustPressed(0, 38) then
+			Pickup(closestObject)
+		elseif IsControlJustPressed(0, 47) then
+			GoToBed(closestObject)
+		end
+
+	end
+end)
 
 RegisterNetEvent('spawnkatalka')
 AddEventHandler('spawnkatalka', function()
