@@ -81,7 +81,7 @@ Citizen.CreateThread(function()
 		Wait(1000)
 		local pedCoords = GetEntityCoords(PlayerPedId())
 		local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("v_med_bed1"), false)
-		if DoesEntityExist(closestObject) then
+    if DoesEntityExist(closestObject) then
 			nearObject = closestObject
 		else
 			nearObject = nil
@@ -92,17 +92,18 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(5)
-		if not nearObject then return end
-		
-		local wheelChairCoords = GetEntityCoords(nearObject)
-		DrawText3Ds(wheelChairCoords, "~g~E~s~ взять ~o~G~s~ лечь ~r~X~w~ отпустить", 1.0, nil)
+    if nearObject then
+      
+      local wheelChairCoords = GetEntityCoords(nearObject)
+      DrawText3Ds(wheelChairCoords, "[~g~E~s~] взять | [~o~G~s~] лечь | [~r~X~w~] отпустить", 0.5, nil, true)
 
-		if IsControlJustPressed(0, 38) then
-			Pickup(closestObject)
-		elseif IsControlJustPressed(0, 47) then
-			GoToBed(closestObject)
-		end
+      if IsControlJustPressed(0, 38) then
+        Pickup(nearObject)
+      elseif IsControlJustPressed(0, 47) then
+        GoToBed(nearObject)
+      end
 
+    end
 	end
 end)
 
