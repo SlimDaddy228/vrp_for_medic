@@ -1,19 +1,3 @@
-
-local function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
-	SetTextFont(6)
-	SetTextProportional(6)
-	SetTextScale(scale/1.0, scale/1.0)
-	SetTextColour(r, g, b, a)
-	SetTextDropShadow(0, 0, 0, 0,255)
-	SetTextEdge(1, 0, 0, 0, 255)
-	SetTextDropShadow()
-	SetTextOutline()
-	SetTextCentre(centre)
-	SetTextEntry("STRING")
-	AddTextComponentString(text)
-	DrawText(x , y)
-end
-
 local function LoadModel(model)
 	while not HasModelLoaded(model) do
 		RequestModel(model)
@@ -28,6 +12,34 @@ local function LoadAnim(dict)
 		
 		Wait(10)
 	end
+end
+
+local function DrawText3Ds(coords, text, scale, color, notRect)
+	local x,y,z = coords.x, coords.y, coords.z
+	local onScreen, _x, _y = World3dToScreen2d(x, y, z)
+	local pX, pY, pZ = table.unpack(GetGameplayCamCoords())
+
+  color = color
+
+  if not color then
+    color = {255, 255, 255, 215}
+  end
+
+	SetTextScale(scale, scale)
+	SetTextFont(4)
+	SetTextProportional(1)
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	SetTextColour(color[1], color[2], color[3], color[4])
+
+	AddTextComponentString(text)
+	DrawText(_x, _y)
+
+  if not notRect then
+    local factor = (string.len(text)) / 370
+
+    DrawRect(_x, _y + 0.0150, 0.005 + factor, 0.025, 41, 11, 41, 100)
+  end
 end
 
 local function Sit(wheelchairObject)
@@ -63,22 +75,37 @@ local function Pickup(wheelchairObject)
 	end
 end
 
-CreateThread(function()
+local nearObject
+
+Citizen.CreateThread(function()
+	while true do
+		Wait(1000)
+		local pedCoords = GetEntityCoords(PlayerPedId())
+		local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("prop_wheelchair_01"), false)
+    if DoesEntityExist(closestObject) then
+			nearObject = closestObject
+		else
+			nearObject = nil
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
 	while true do
 		Wait(5)
-		local pedCoords = GetEntityCoords(PlayerPedId())
-		local closestObject = GetClosestObjectOfType(pedCoords, 10.0, GetHashKey("prop_wheelchair_01"), false)
-		local wheelChairCoords = GetEntityCoords(closestObject)
-			if GetDistanceBetweenCoords(pedCoords, wheelChairCoords, true) <= 2.5 then
-				drawTxt("~g~E~s~ взять ~o~G~s~ сесть ~r~X~w~ отпустить",0,1,0.5,0.95,0.6,255,255,255,255)
-				if IsControlJustPressed(0, 38) then
-					Pickup(closestObject)
-				end
-				if IsControlJustPressed(0, 47) then
-					Sit(closestObject)
-				end
-			end
-		end
+    if nearObject then
+      
+      local wheelChairCoords = GetEntityCoords(nearObject)
+      DrawText3Ds(wheelChairCoords, "[~g~E~s~] взять | [~o~G~s~] сесть | [~r~X~w~] отпустить", 0.5, nil, true)
+
+      if IsControlJustPressed(0, 38) then
+        Pickup(nearObject)
+      elseif IsControlJustPressed(0, 47) then
+        Sit(nearObject)
+      end
+
+    end
+	end
 end)
 
 RegisterNetEvent("spawnkolycka")
