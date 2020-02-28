@@ -82,7 +82,7 @@ Citizen.CreateThread(function()
 		Wait(1000)
 		local pedCoords = GetEntityCoords(PlayerPedId())
 		local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("prop_wheelchair_01"), false)
-    if DoesEntityExist(closestObject) then
+    if DoesEntityExist(closestObject) and NetworkGetEntityIsNetworked(closestObject) then
 			nearObject = closestObject
 		else
 			nearObject = nil
