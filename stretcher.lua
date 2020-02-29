@@ -74,17 +74,27 @@ local function Pickup(wheelchairObject)
 	end
 end
 
-local nearObject
+local beds = {
+	'v_med_bed1',
+	'v_med_bed2',
+	'v_med_emptybed',
+}
+
+local nearObject, isLocal
 
 Citizen.CreateThread(function()
 	while true do
 		Wait(1000)
 		local pedCoords = GetEntityCoords(PlayerPedId())
-		local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("v_med_bed1"), false)
-    if DoesEntityExist(closestObject) then
-			nearObject = closestObject
-		else
-			nearObject = nil
+		for k,v in pairs(beds) do
+			local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey(v), false)
+			if DoesEntityExist(closestObject) then
+				nearObject = closestObject
+				isLocal = not NetworkGetEntityIsNetworked(closestObject)
+				break
+			else
+				nearObject = nil
+			end
 		end
 	end
 end)
@@ -94,10 +104,16 @@ Citizen.CreateThread(function()
 		Wait(5)
     if nearObject then
       
-      local wheelChairCoords = GetEntityCoords(nearObject)
-      DrawText3Ds(wheelChairCoords, "[~g~E~s~] взять | [~o~G~s~] лечь | [~r~X~w~] отпустить", 0.5, nil, true)
+			local wheelChairCoords = GetEntityCoords(nearObject)
+			local text = '[~g~E~s~] взять | [~o~G~s~] лечь | [~r~X~w~] встать'
 
-      if IsControlJustPressed(0, 38) then
+			if isLocal then
+				text = '[~o~G~s~] лечь | [~r~X~w~] встать'
+			end
+
+      DrawText3Ds(wheelChairCoords, text, 0.5, nil, true)
+
+      if IsControlJustPressed(0, 38) and not isLocal then
         Pickup(nearObject)
       elseif IsControlJustPressed(0, 47) then
         GoToBed(nearObject)
@@ -110,7 +126,7 @@ end)
 RegisterNetEvent('vrp_for_medic:stretcher:spawn')
 AddEventHandler('vrp_for_medic:stretcher:spawn', function()
 	LoadModel('v_med_bed1')
-	local wheelchair = CreateObject(GetHashKey('v_med_bed1'), GetEntityCoords(PlayerPedId())-1, true)
+	local wheelchair = CreateObject(GetHashKey('v_med_bed1'), GetEntityCoords(PlayerPedId())-1, true, true, true)
 end)
 
 RegisterNetEvent('vrp_for_medic:stretcher:delete')
